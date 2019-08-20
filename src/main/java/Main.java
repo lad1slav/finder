@@ -1,4 +1,6 @@
 import utility.Item;
+import utility.Parser;
+import utility.parsers.RozetkaParser;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,5 +9,8 @@ public class Main {
         Item i = new Item();
         i.setItemPrice(3.65558);
         System.out.println(i.getItemPrice());
+
+        RozetkaParser rozetkaParser = new RozetkaParser();
+        rozetkaParser.find("miband");
     }
 }
