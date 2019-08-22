@@ -1,5 +1,8 @@
 package utility;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.Getter;
 import lombok.Setter;
 import org.jsoup.Connection;
@@ -9,7 +12,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public abstract class Parser
@@ -20,14 +26,25 @@ public abstract class Parser
         URL = url;
     }
 
-    protected Connection.Response connect(String url) {
+    protected Document connect(String url) {
         try {
-            return Jsoup.connect(URL + url).execute();
-        } catch (HttpStatusException e) {
+            WebClient webClient = new WebClient();
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            HtmlPage myPage = webClient.getPage(this.URL + url);
+
+            try{
+                FileWriter fw=new FileWriter("testout.txt");
+                fw.write(myPage.asXml());
+                fw.close();
+            }catch(Exception e){System.out.println(e);}
+
+            return Jsoup.parse(myPage.asXml());
+        } catch (FailingHttpStatusCodeException e) {
             e.printStackTrace();
 
             return null;
-        } catch (IOException e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
