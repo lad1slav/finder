@@ -20,9 +20,9 @@ public abstract class Parser
         URL = url;
     }
 
-    protected Connection.Response connect(String url) {
+    protected Document connect(String url) {
         try {
-            return Jsoup.connect(URL + url).execute();
+            return Jsoup.connect(URL + url).get();
         } catch (HttpStatusException e) {
             e.printStackTrace();
 

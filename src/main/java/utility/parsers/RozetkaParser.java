@@ -1,8 +1,6 @@
 package utility.parsers;
 
-import lombok.Getter;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -58,7 +56,6 @@ public class RozetkaParser extends Parser implements Finder {
     public Elements parse(Document document) {
         Elements searchList = document.getElementsByAttributeValue("name", "search_list");
         Elements foundItems = searchList.last().getElementsByAttributeValue("data-location", "SearchResults");
-        System.out.println(foundItems.size());
 
         return foundItems;
     }
@@ -67,23 +64,15 @@ public class RozetkaParser extends Parser implements Finder {
     public Elements parseAllPages(String url) {
         int pageNum = 1;
 
-        Connection.Response connectionResponse = this.connect(url + "&p=" + pageNum);
-
         Elements elements = new Elements();
-        Document document = null;
+        Document document = this.connect(url + "&p=" + pageNum);
 
-        while (connectionResponse != null) {
-            try {
-                document = connectionResponse.parse();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println(document.title());
+        while (document != null) {
+            System.out.println(pageNum + " || " + document.title());
 
             elements.addAll(this.parse(document));
 
-            connectionResponse = this.connect(url + "&p=" + ++pageNum);
+            document = this.connect(url + "&p=" + ++pageNum);
         }
 
         return elements;
