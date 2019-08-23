@@ -6,6 +6,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import utility.Finder;
 import utility.Item;
 import utility.Parser;
@@ -19,6 +22,24 @@ public class RozetkaParser extends Parser implements Finder {
 
     public RozetkaParser() {
         super(ROZETKA_URL);
+    }
+
+    @Override
+    protected Document connect(String url) {
+        System.setProperty("webdriver.gecko.driver", "C:\\Users\\manzhv\\IdeaProjects\\finder\\src\\main\\resources\\geckodriver.exe");
+        WebDriver webDriver = new FirefoxDriver();
+
+        try {
+            webDriver.navigate().to(this.URL + url);
+
+            return Jsoup.parse(webDriver.getPageSource());
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        } finally {
+            webDriver.close();
+        }
     }
 
     public ArrayList<Item> find(String phrase) {
@@ -47,6 +68,8 @@ public class RozetkaParser extends Parser implements Finder {
         name = name.getElementsByTag("a").last();
 
         Element price = desc.getElementsByAttributeValue("name", "price").last();
+        price = price.getElementsByClass("g-price-uah").last();
+        price = price.getElementsByTag("span").first();
 
         System.out.println(name.ownText());
         System.out.println(price.ownText());
@@ -58,7 +81,6 @@ public class RozetkaParser extends Parser implements Finder {
     public Elements parse(Document document) {
         Elements searchList = document.getElementsByAttributeValue("name", "search_list");
         Elements foundItems = searchList.last().getElementsByAttributeValue("data-location", "SearchResults");
-        System.out.println(foundItems.size());
 
         return foundItems;
     }
@@ -67,24 +89,20 @@ public class RozetkaParser extends Parser implements Finder {
     public Elements parseAllPages(String url) {
         int pageNum = 1;
 
-        Connection.Response connectionResponse = this.connect(url + "&p=" + pageNum);
-
         Elements elements = new Elements();
-        Document document = null;
 
-        while (connectionResponse != null) {
-            try {
-                document = connectionResponse.parse();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Document document = this.connect(url + "&p=" + pageNum);
 
-            System.out.println(document.title());
-
-            elements.addAll(this.parse(document));
-
-            connectionResponse = this.connect(url + "&p=" + ++pageNum);
-        }
+        elements.addAll(this.parse(document));
+//        while (document != null) {
+//            System.out.println(pageNum + " || " + document.title());
+//
+//            elements.addAll(this.parse(document));
+//
+//            pageNum = 34;
+//
+//            document = this.connect(url + "&p=" + ++pageNum);
+//        }
 
         return elements;
     }
