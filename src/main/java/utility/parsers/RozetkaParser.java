@@ -17,6 +17,9 @@ import utility.Parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class RozetkaParser extends Parser implements Finder {
 
@@ -56,6 +59,7 @@ public class RozetkaParser extends Parser implements Finder {
         Elements elements = parseAllPages(findExpressionURL);
 
         ArrayList<Item> items = new ArrayList<>();
+
         elements.forEach(element -> {
             Item item = parse(element);
 
@@ -97,19 +101,54 @@ public class RozetkaParser extends Parser implements Finder {
     @Override
     public Elements parseAllPages(String url) {
         int pageNum = 1;
+        ArrayList<Integer> pageNums = new ArrayList<>();
 
         Elements elements = new Elements();
 
-        Document document = this.connect(url + "&p=" + pageNum);
+//        Document document = this.connect(url + "&p=" + pageNum);
 
-        while (document != null) {
-            System.out.println(pageNum + " || " + document.title());
+        Parser thisParser = this;
 
-            elements.addAll(this.parse(document));
+//        while (document != null) {
+        while (pageNum < 32) {
 
-            document = this.connect(url + "&p=" + ++pageNum);
+            pageNums.add(pageNum);
+
+            pageNum++;
         }
+
+        ExecutorService es = Executors.newCachedThreadPool();
+        pageNums.forEach((currPageNum) -> {
+            es.execute(new Runnable() {
+                @Override
+                public void run() {
+                    elements.addAll(((RozetkaParser) thisParser).parsePages(url, currPageNum));
+                }
+            });
+        });
+
+        es.shutdown();
+        while(true) {
+            try {
+                if (!!es.awaitTermination(1, TimeUnit.MINUTES)) break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
 
         return elements;
     }
+
+    public Elements parsePages(String url, int pageNum) {
+        Document document = this.connect(url + "&p=" + pageNum);
+        System.out.println(pageNum + " || " + document.title());
+
+        return this.parse(document);
+    }
+
+//    new Thread(() -> {
+//        elements.addAll(thisParser.parse(document));
+//        System.out.println(pageNum + " || " + document.title());
+//        document = thisParser.connect(url + "&p=" + ++pageNum);
+//    }).start();
 }
