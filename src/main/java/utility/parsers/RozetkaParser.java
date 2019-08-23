@@ -24,6 +24,25 @@ public class RozetkaParser extends Parser implements Finder {
         super(ROZETKA_URL);
     }
 
+    @Override
+    protected Document connect(String url) {
+        try {
+            WebClient webClient = new WebClient();
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            HtmlPage myPage = webClient.getPage(this.URL + url);
+
+            return Jsoup.parse(myPage.asXml());
+        } catch (FailingHttpStatusCodeException e) {
+            e.printStackTrace();
+
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public ArrayList<Item> find(String phrase) {
         String findExpressionURL = "search/?text=" + phrase.replace(" ", "+");
         Elements elements = parseAllPages(findExpressionURL);
@@ -68,25 +87,6 @@ public class RozetkaParser extends Parser implements Finder {
     }
 
     @Override
-    protected Document connect(String url) {
-        try {
-            WebClient webClient = new WebClient();
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-            HtmlPage myPage = webClient.getPage(this.URL + url);
-
-            return Jsoup.parse(myPage.asXml());
-        } catch (FailingHttpStatusCodeException e) {
-            e.printStackTrace();
-
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
     public Elements parseAllPages(String url) {
         int pageNum = 1;
 
@@ -95,15 +95,13 @@ public class RozetkaParser extends Parser implements Finder {
 
         document = this.connect(url + "&p=" + pageNum);
 
-        elements.addAll(this.parse(document));
-//        while (document != null) {
-//            System.out.println(pageNum + " || " + document.title());
-//
-//            elements.addAll(this.parse(document));
-//
-//            pageNum = 34;
-//            document = this.connect(url + "&p=" + ++pageNum);
-//        }
+        while (document != null) {
+            System.out.println(pageNum + " || " + document.title());
+
+            elements.addAll(this.parse(document));
+
+            document = this.connect(url + "&p=" + ++pageNum);
+        }
 
         return elements;
     }
