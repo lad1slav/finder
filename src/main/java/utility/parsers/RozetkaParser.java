@@ -1,6 +1,10 @@
 package utility.parsers;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -64,6 +68,25 @@ public class RozetkaParser extends Parser implements Finder {
     }
 
     @Override
+    protected Document connect(String url) {
+        try {
+            WebClient webClient = new WebClient();
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            HtmlPage myPage = webClient.getPage(this.URL + url);
+
+            return Jsoup.parse(myPage.asXml());
+        } catch (FailingHttpStatusCodeException e) {
+            e.printStackTrace();
+
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
     public Elements parseAllPages(String url) {
         int pageNum = 1;
 
@@ -72,14 +95,15 @@ public class RozetkaParser extends Parser implements Finder {
 
         document = this.connect(url + "&p=" + pageNum);
 
-        while (document != null) {
-            System.out.println(pageNum + " || " + document.title());
-
-            elements.addAll(this.parse(document));
-
-            pageNum = 34;
-            document = this.connect(url + "&p=" + ++pageNum);
-        }
+        elements.addAll(this.parse(document));
+//        while (document != null) {
+//            System.out.println(pageNum + " || " + document.title());
+//
+//            elements.addAll(this.parse(document));
+//
+//            pageNum = 34;
+//            document = this.connect(url + "&p=" + ++pageNum);
+//        }
 
         return elements;
     }

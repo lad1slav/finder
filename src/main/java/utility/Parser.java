@@ -28,23 +28,12 @@ public abstract class Parser
 
     protected Document connect(String url) {
         try {
-            WebClient webClient = new WebClient();
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-            HtmlPage myPage = webClient.getPage(this.URL + url);
-
-            try{
-                FileWriter fw=new FileWriter("testout.txt");
-                fw.write(myPage.asXml());
-                fw.close();
-            }catch(Exception e){System.out.println(e);}
-
-            return Jsoup.parse(myPage.asXml());
-        } catch (FailingHttpStatusCodeException e) {
+            return Jsoup.connect(URL + url).get();
+        } catch (HttpStatusException e) {
             e.printStackTrace();
 
             return null;
-        }
-        catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
