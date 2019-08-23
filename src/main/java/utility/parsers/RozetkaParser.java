@@ -1,5 +1,6 @@
 package utility.parsers;
 
+import exceptions.HttpStatusCodeException;
 import lombok.Getter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -9,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import soft.URLHelper;
 import utility.Finder;
 import utility.Item;
 import utility.Parser;
@@ -27,13 +29,20 @@ public class RozetkaParser extends Parser implements Finder {
     @Override
     protected Document connect(String url) {
         System.setProperty("webdriver.gecko.driver", "C:\\Users\\manzhv\\IdeaProjects\\finder\\src\\main\\resources\\geckodriver.exe");
-        WebDriver webDriver = new FirefoxDriver();
+        //System.setProperty(FirefoxDriver.SystemProperty.DRIVER_USE_MARIONETTE, "true");
+        System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
 
+        WebDriver webDriver = new FirefoxDriver();
+        String targeUrl = this.URL + url;
         try {
-            webDriver.navigate().to(this.URL + url);
+            webDriver.navigate().to(targeUrl);
+
+            int statusCode = URLHelper.getPageResponseCode(webDriver.getCurrentUrl());
+            System.out.println(statusCode + " || " + targeUrl);
+            if (statusCode == -1 || statusCode == 404) { throw new HttpStatusCodeException("" + statusCode); }
 
             return Jsoup.parse(webDriver.getPageSource());
-        } catch (Exception e) {
+        } catch (HttpStatusCodeException e) {
             e.printStackTrace();
 
             return null;
@@ -93,16 +102,13 @@ public class RozetkaParser extends Parser implements Finder {
 
         Document document = this.connect(url + "&p=" + pageNum);
 
-        elements.addAll(this.parse(document));
-//        while (document != null) {
-//            System.out.println(pageNum + " || " + document.title());
-//
-//            elements.addAll(this.parse(document));
-//
-//            pageNum = 34;
-//
-//            document = this.connect(url + "&p=" + ++pageNum);
-//        }
+        while (document != null) {
+            System.out.println(pageNum + " || " + document.title());
+
+            elements.addAll(this.parse(document));
+
+            document = this.connect(url + "&p=" + ++pageNum);
+        }
 
         return elements;
     }
