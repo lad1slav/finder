@@ -10,10 +10,11 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+/finder.iml
 # Generated files
 .idea/**/contentModel.xml
 
-# Sensitive or high-churn files
+# Sensitive or hikgh-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.local.xml
@@ -88,4 +89,3 @@ buildNumber.properties
 src/main/java/utility/services/
 src/main/resources/
 src/test/
-/finder.iml
