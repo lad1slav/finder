@@ -81,3 +81,11 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
+.idea/compiler.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+src/main/java/utility/services/
+src/main/resources/
+src/test/
+/finder.iml
