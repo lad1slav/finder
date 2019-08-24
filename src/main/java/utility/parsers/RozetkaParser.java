@@ -44,7 +44,12 @@ public class RozetkaParser extends Parser implements Finder {
         Element name = desc.getElementsByClass("g-i-tile-i-title").last();
         name = name.getElementsByTag("a").last();
 
-        Element price = desc.getElementsByAttributeValue("name", "price").last();
+        Element price = desc.getElementsByAttributeValue("name", "prices_active_element_original").last();
+        price = price.getElementsByTag("script").first();
+
+//        Element price = desc.getElementsByAttributeValue("name", "price").last();
+//        price = price.getElementsByClass("g-price-uah").last();
+//        price = price.getElementsByTag("span").first();
 
         System.out.println(name.ownText());
         System.out.println(price.ownText());
