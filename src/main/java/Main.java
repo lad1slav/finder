@@ -1,6 +1,7 @@
 import utility.Item;
 import utility.parsers.RozetkaParser;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Main {
@@ -15,7 +16,10 @@ public class Main {
 
         Date startDate = new Date();
         Long time = System.currentTimeMillis();
-        rozetkaParser.find("miband");
+
+        ArrayList<Item> result = rozetkaParser.find("miband");
+        System.out.println(result.size());
+
         Date endDate = new Date();
         time = System.currentTimeMillis() - time;
         System.out.println(startDate);
