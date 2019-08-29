@@ -21,6 +21,7 @@ public class FinderController {
     @GetMapping("/{findQuery}")
     @ResponseStatus(HttpStatus.OK)
     public String find(@PathVariable("findQuery") String findQuery) {
+        //RequestParam Set<ParserList>
         return finderService.find(findQuery);
     }
 }

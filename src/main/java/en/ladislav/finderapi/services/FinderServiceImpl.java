@@ -1,19 +1,26 @@
 package en.ladislav.finderapi.services;
 
 import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.utility.parser.Parser;
+import en.ladislav.finderapi.utility.parser.ParserList;
 import en.ladislav.finderapi.utility.parser.RozetkaParser;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 @Service
 public class FinderServiceImpl implements FinderService {
+
+    @Override
+    public String find(String findQuery, Set<ParserList> parsers) {
+        return null;
+    }
+
     @Override
     public String find(String findQuery) {
-        System.out.println("starting...");
-
-        RozetkaParser rozetkaParser = new RozetkaParser();
+        Parser rozetkaParser = ParserList.ROZETKA_PARSER.getParser();
 
         Date startDate = new Date();
         Long time = System.currentTimeMillis();

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RozetkaParser extends Parser implements Finder {
+public class RozetkaParser extends Parser {
 
     private static final String ROZETKA_URL = "https://rozetka.com.ua/";
 
-    public RozetkaParser() {
+    RozetkaParser() {
         super(ROZETKA_URL);
     }
 
@@ -36,14 +36,14 @@ public class RozetkaParser extends Parser implements Finder {
     }
 
     @Override
-    public Elements parse(Document document) {
+    protected Elements parse(Document document) {
         Elements desc = this.getElementsFromPage(document);
 
         return desc;
     }
 
     @Override
-    public Elements parseAllPages(String url) {
+    protected Elements parseAllPages(String url) {
         int pageNum = 1;
 
         Elements elements = new Elements();

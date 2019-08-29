@@ -1,5 +1,6 @@
 package en.ladislav.finderapi.utility.parser;
 
+import en.ladislav.finderapi.utility.Finder;
 import en.ladislav.finderapi.utility.Item;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -10,7 +11,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-public abstract class Parser
+public abstract class Parser implements Finder
 {
     public final String URL;
 
@@ -58,9 +59,9 @@ public abstract class Parser
         return item;
     }
 
-    public abstract Elements parseAllPages(String url);
+    protected abstract Elements parseAllPages(String url);
 
-    public abstract Elements parse(Document document);
+    protected abstract Elements parse(Document document);
 
     protected abstract Elements getElementsFromPage(Document document);
 
