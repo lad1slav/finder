@@ -1,5 +1,6 @@
-package en.ladislav.finderapi.controller;
+package en.ladislav.finderapi.api.controller;
 
+import en.ladislav.finderapi.api.dto.ItemDto;
 import en.ladislav.finderapi.services.FinderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class FinderController {
 
     @GetMapping("/{findQuery}")
     @ResponseStatus(HttpStatus.OK)
-    public String find(@PathVariable("findQuery") String findQuery) {
+    public List<ItemDto> find(@PathVariable("findQuery") String findQuery) {
         //RequestParam Set<ParserList>
         return finderService.find(findQuery);
     }
