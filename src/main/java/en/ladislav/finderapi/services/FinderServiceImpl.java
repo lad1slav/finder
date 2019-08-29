@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,11 +24,6 @@ public class FinderServiceImpl implements FinderService {
 
     @Override
     public List<ItemDto> find(String findQuery, Set<ParserList> parsers) {
-        return null;
-    }
-
-    @Override
-    public List<ItemDto> find(String findQuery) {
         Parser rozetkaParser = ParserList.ROZETKA_PARSER.getParser();
 
         log.info("Searching for query \"{}\"", findQuery);
@@ -40,5 +36,11 @@ public class FinderServiceImpl implements FinderService {
         log.info("Searching for query \"{}\" was finished in {} ms", findQuery, time);
 
         return itemMapper.itemsToItemDtos(result);
+    }
+
+    @Override
+    public List<ItemDto> find(String findQuery) {
+        System.out.println(ParserList.values());
+        return this.find(findQuery, ParserList.allParsersIdentifier);
     }
 }

@@ -14,9 +14,11 @@ import java.net.SocketTimeoutException;
 public abstract class Parser implements Finder
 {
     public final String URL;
+    public final ParserList IDENTIFIER;
 
-    Parser(String url) {
+    Parser(String url, ParserList identifier) {
         this.URL = url;
+        this.IDENTIFIER = identifier;
     }
 
     Document connect(String url) {

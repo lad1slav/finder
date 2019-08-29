@@ -15,8 +15,10 @@ public class RozetkaParser extends Parser {
 
     private static final String ROZETKA_URL = "https://rozetka.com.ua/";
 
+    private static final ParserList ROZETKA_IDENTIFIER = ParserList.ROZETKA_PARSER;
+
     RozetkaParser() {
-        super(ROZETKA_URL);
+        super(ROZETKA_URL, ROZETKA_IDENTIFIER);
     }
 
     public ArrayList<Item> find(String phrase) {
