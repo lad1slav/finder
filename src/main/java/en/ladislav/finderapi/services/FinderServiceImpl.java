@@ -1,23 +1,24 @@
-import utility.Item;
-import utility.parsers.RozetkaParser;
+package en.ladislav.finderapi.services;
+
+import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.utility.parser.RozetkaParser;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Main {
-    public static void main(String[] args) {
+@Service
+public class FinderServiceImpl implements FinderService {
+    @Override
+    public String find(String findQuery) {
         System.out.println("starting...");
-
-        Item i = new Item();
-        i.setItemPrice(3.65558);
-        System.out.println(i.getItemPrice());
 
         RozetkaParser rozetkaParser = new RozetkaParser();
 
         Date startDate = new Date();
         Long time = System.currentTimeMillis();
 
-        ArrayList<Item> result = rozetkaParser.find("miband");
+        ArrayList<Item> result = rozetkaParser.find(findQuery);
         System.out.println(result.size());
 
         Date endDate = new Date();
@@ -25,5 +26,7 @@ public class Main {
         System.out.println(startDate);
         System.out.println(endDate);
         System.out.println(time);
+
+        return String.valueOf(result.size());
     }
 }

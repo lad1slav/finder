@@ -1,29 +1,14 @@
-package utility.parsers;
+package en.ladislav.finderapi.utility.parser;
 
-import com.sun.deploy.net.HttpRequest;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
-import lombok.Getter;
-import org.jsoup.Connection;
+import en.ladislav.finderapi.utility.Item;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import sun.misc.IOUtils;
-import utility.Item;
 
-import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Properties;
 
 public abstract class Parser
 {

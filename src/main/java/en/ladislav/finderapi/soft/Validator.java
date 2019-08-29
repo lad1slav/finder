@@ -1,4 +1,4 @@
-package soft;
+package en.ladislav.finderapi.soft;
 
 import lombok.NoArgsConstructor;
 

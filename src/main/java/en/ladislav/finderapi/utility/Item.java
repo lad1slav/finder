@@ -1,8 +1,9 @@
-package utility;
+package en.ladislav.finderapi.utility;
 
+import en.ladislav.finderapi.soft.Validator;
 import lombok.Getter;
 import lombok.Setter;
-import soft.Validator;
+import en.ladislav.finderapi.soft.Validator;
 
 import java.net.MalformedURLException;
 import java.net.URI;

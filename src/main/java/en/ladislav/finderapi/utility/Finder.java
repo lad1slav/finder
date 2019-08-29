@@ -1,4 +1,4 @@
-package utility;
+package en.ladislav.finderapi.utility;
 
 import java.util.ArrayList;
 

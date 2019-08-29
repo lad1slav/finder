@@ -1,11 +1,11 @@
-package utility.parsers;
+package en.ladislav.finderapi.utility.parser;
 
+import en.ladislav.finderapi.utility.Item;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import soft.Validator;
-import utility.Finder;
-import utility.Item;
+import en.ladislav.finderapi.soft.Validator;
+import en.ladislav.finderapi.utility.Finder;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -23,7 +23,7 @@ public class RozetkaParser extends Parser implements Finder {
         String findExpressionURL = "search/?text=" + phrase.replace(" ", "+");
         Elements elements = parseAllPages(findExpressionURL);
 
-        ArrayList<Item> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<Item>();
         elements.forEach(element -> {
             Item item = this.parse(element);
 

@@ -1,7 +1,7 @@
-package utility.properties;
+package en.ladislav.finderapi.utility.property;
 
 import lombok.Getter;
-import utility.Item;
+import en.ladislav.finderapi.utility.Item;
 
 import java.util.ArrayList;
 import java.util.Enumeration;

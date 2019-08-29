@@ -1,4 +1,4 @@
-package utility.properties;
+package en.ladislav.finderapi.utility.property;
 
 public enum PropertyKey {
     MIN_PRICE,
