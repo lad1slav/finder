@@ -19,11 +19,21 @@ public class SearchProperties {
         return this.properties.setProperty(String.valueOf(key), value);
     }
 
+    public int size() {
+        return this.properties.size();
+    }
+
+    public boolean isEmpty() {
+        return this.properties.isEmpty();
+    }
+
     public Enumeration propertyNames() {
         return this.properties.propertyNames();
     }
 
-    public ArrayList<Item> find(ArrayList<Item> items) {
+    public ArrayList<Item> findIn(ArrayList<Item> items) {
+        if (this.isEmpty()) { return items; }
+
         ArrayList<Item> resultItemList = new ArrayList<>(items);
 
         Enumeration propertyNames = this.propertyNames();

@@ -4,6 +4,7 @@ import en.ladislav.finderapi.utility.Finder;
 import en.ladislav.finderapi.utility.Item;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,6 +14,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
+@Slf4j
 public abstract class Parser implements Finder
 {
     public final String URL;
@@ -23,15 +25,16 @@ public abstract class Parser implements Finder
 
     Document connect(String url) {
         try {
-            System.out.println(this.URL + url);
+            log.info("Connecting to [{}]", this.URL + url);
 
             return Jsoup.connect(this.URL + url).get();
         } catch (HttpStatusException e) {
-            e.printStackTrace();
+            log.warn("{}", e.toString());
 
             return null;
         } catch (SocketTimeoutException e) {
-          e.printStackTrace();
+            e.printStackTrace();
+            log.error("{}", e);
 
           //bad request timeout connection inspect this || return new Document();
         } catch (IOException e) {

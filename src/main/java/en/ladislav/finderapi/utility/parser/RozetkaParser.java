@@ -1,6 +1,7 @@
 package en.ladislav.finderapi.utility.parser;
 
 import en.ladislav.finderapi.utility.Item;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@Slf4j
 public class RozetkaParser extends Parser {
 
     private static final String ROZETKA_URL = "https://rozetka.com.ua/";
@@ -50,9 +51,14 @@ public class RozetkaParser extends Parser {
         Document document = this.connect(url + "&redirected=1&p=" + pageNum);
 
         while (document != null) {
-            if(!document.getElementsByClass("search-container-nothing").isEmpty()) { break; }
+            if(!document.getElementsByClass("search-container-nothing").isEmpty()) {
+                //sdfg test
 
-            System.out.println(pageNum + " || " + document.title());
+                log.warn("Nothing was found: [{}]", document.location());
+                break;
+            }
+
+            log.info("Connected to [{}] [{}] [{}]", document.location(), pageNum, document.title());
 
             elements.addAll(this.parse(document));
 
