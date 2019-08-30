@@ -40,7 +40,7 @@ public class FinderServiceImpl implements FinderService {
 
     @Override
     public List<ItemDto> find(String findQuery) {
-        System.out.println(ParserList.values());
+        System.out.println(ParserList.values()[0]);
         return this.find(findQuery, ParserList.allParsersIdentifier);
     }
 }

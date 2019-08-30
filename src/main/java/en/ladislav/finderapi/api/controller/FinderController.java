@@ -26,7 +26,7 @@ public class FinderController {
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> find(@PathVariable("query") String findQuery,
                               @RequestParam(value = "resources", required = false) Set<ParserList> parsers) {
-        if (parsers == null)
+        if (parsers == null || parsers.isEmpty())
         {
             return finderService.find(findQuery);
         }
