@@ -2,6 +2,7 @@ package en.ladislav.finderapi.utility;
 
 import en.ladislav.finderapi.soft.Validator;
 import en.ladislav.finderapi.soft.Validator;
+import en.ladislav.finderapi.utility.parser.ParserList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,13 +34,14 @@ public class Item {
         this.itemURL = itemURL;
     }
 
-    public Item(String itemName, String itemURL, String itemPhotoURL, double itemPrice) {
+    public Item(String itemName, String itemURL, String itemPhotoURL, double itemPrice, String itemSource) {
         this.itemId = UUID.randomUUID().toString();
 
         this.setItemName(itemName);
         this.setItemURL(itemURL);
         this.setItemPhotoURL(itemPhotoURL);
         this.setItemPrice(itemPrice);
+        this.setItemSource(itemSource);
     }
 
     public Item() {

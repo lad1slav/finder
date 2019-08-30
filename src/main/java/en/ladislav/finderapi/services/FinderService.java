@@ -10,5 +10,5 @@ import java.util.Set;
 public interface FinderService {
     List<ItemDto> find(String findQuery);
 
-    List<ItemDto> find(String findQuery, Set<ParserList> parsers);
+    List<ItemDto> find(String findQuery, Set<ParserList> parserIdentifiers);
 }

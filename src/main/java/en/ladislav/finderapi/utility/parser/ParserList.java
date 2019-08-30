@@ -17,5 +17,5 @@ public enum ParserList {
 
     public static final List<Parser> allParsers = Lists.newArrayList(ROZETKA_PARSER.getParser());
 
-    public static final Set<ParserList> allParsersIdentifier = Sets.newHashSet(ParserList.values());
+    public static final Set<ParserList> allParserIdentifiers = Sets.newHashSet(ParserList.values());
 }

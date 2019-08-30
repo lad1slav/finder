@@ -2,6 +2,8 @@ package en.ladislav.finderapi.utility.parser;
 
 import en.ladislav.finderapi.utility.Finder;
 import en.ladislav.finderapi.utility.Item;
+import lombok.Getter;
+import lombok.Setter;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,11 +16,9 @@ import java.net.SocketTimeoutException;
 public abstract class Parser implements Finder
 {
     public final String URL;
-    public final ParserList IDENTIFIER;
 
-    Parser(String url, ParserList identifier) {
+    Parser(String url) {
         this.URL = url;
-        this.IDENTIFIER = identifier;
     }
 
     Document connect(String url) {

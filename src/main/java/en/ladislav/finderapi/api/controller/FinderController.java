@@ -25,12 +25,10 @@ public class FinderController {
     @GetMapping("/{query}")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> find(@PathVariable("query") String findQuery,
-                              @RequestParam(value = "resources", required = false) Set<ParserList> parsers) {
-        if (parsers == null || parsers.isEmpty())
-        {
-            return finderService.find(findQuery);
-        }
+                              @RequestParam(value = "resources", required = false) Set<ParserList> parserIdentifiers) {
 
-        return finderService.find(findQuery, parsers);
+        if (parserIdentifiers == null || parserIdentifiers.isEmpty()) { return finderService.find(findQuery); }
+
+        return finderService.find(findQuery, parserIdentifiers);
     }
 }

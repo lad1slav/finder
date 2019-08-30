@@ -1,5 +1,6 @@
 package en.ladislav.finderapi.api.dto;
 
+import en.ladislav.finderapi.utility.parser.ParserList;
 import lombok.Getter;
 import lombok.Setter;
 

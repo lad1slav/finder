@@ -1,5 +1,6 @@
 package en.ladislav.finderapi.services;
 
+import com.google.common.collect.Lists;
 import en.ladislav.finderapi.api.dto.ItemDto;
 import en.ladislav.finderapi.mapper.ItemMapper;
 import en.ladislav.finderapi.utility.Item;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +23,16 @@ public class FinderServiceImpl implements FinderService {
     private ItemMapper itemMapper;
 
     @Override
-    public List<ItemDto> find(String findQuery, Set<ParserList> parsers) {
-        Parser rozetkaParser = ParserList.ROZETKA_PARSER.getParser();
+    public List<ItemDto> find(String findQuery, Set<ParserList> parserIdentifiers) {
+        ArrayList<Item> result = new ArrayList<>();
 
         log.info("Searching for query \"{}\"", findQuery);
         Long time = System.currentTimeMillis();
 
-        ArrayList<Item> result = rozetkaParser.find(findQuery);
+        parserIdentifiers.forEach(identifier -> {
+            result.addAll(identifier.getParser().find(findQuery));
+        });
+
         log.info("Found {} items", result.size());
 
         time = System.currentTimeMillis() - time;
@@ -40,7 +43,6 @@ public class FinderServiceImpl implements FinderService {
 
     @Override
     public List<ItemDto> find(String findQuery) {
-        System.out.println(ParserList.values()[0]);
-        return this.find(findQuery, ParserList.allParsersIdentifier);
+        return this.find(findQuery, ParserList.allParserIdentifiers);
     }
 }

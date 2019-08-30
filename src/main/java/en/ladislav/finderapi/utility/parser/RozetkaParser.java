@@ -5,20 +5,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import en.ladislav.finderapi.soft.Validator;
-import en.ladislav.finderapi.utility.Finder;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class RozetkaParser extends Parser {
 
     private static final String ROZETKA_URL = "https://rozetka.com.ua/";
 
-    private static final ParserList ROZETKA_IDENTIFIER = ParserList.ROZETKA_PARSER;
-
     RozetkaParser() {
-        super(ROZETKA_URL, ROZETKA_IDENTIFIER);
+        super(ROZETKA_URL);
     }
 
     public ArrayList<Item> find(String phrase) {
