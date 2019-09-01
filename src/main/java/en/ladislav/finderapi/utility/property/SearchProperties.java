@@ -1,6 +1,6 @@
 package en.ladislav.finderapi.utility.property;
 
-import lombok.Getter;
+import en.ladislav.finderapi.utility.parser.ParserList;
 import en.ladislav.finderapi.utility.Item;
 
 import java.util.ArrayList;
@@ -56,6 +56,21 @@ public class SearchProperties {
                         if (item.getItemPrice() > Double.parseDouble(propertyValue)) {
                             resultItemList.remove(item);
                         }
+                    }));
+
+                    break;
+
+                case WITHOUT_SOURCE:
+                    String[] sources = propertyValue.split(" ");
+                    ArrayList<ParserList> identifiers = new ArrayList<ParserList>();
+                    for (String source : sources) { identifiers.add(ParserList.valueOf(source)); }
+
+                    items.forEach((item -> {
+                        identifiers.forEach(identifier -> {
+                            if (item.getItemSource().equals(identifier.getParser().URL)) {
+                                resultItemList.remove(item);
+                            }
+                        });
                     }));
 
                     break;

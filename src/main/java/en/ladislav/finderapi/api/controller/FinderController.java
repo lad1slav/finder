@@ -6,16 +6,13 @@ import en.ladislav.finderapi.utility.parser.ParserList;
 import en.ladislav.finderapi.utility.property.PropertyKey;
 import en.ladislav.finderapi.utility.property.SearchProperties;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +30,7 @@ public class FinderController {
     @GetMapping("/{query}")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> find(@PathVariable("query") String findQuery,
-                              @RequestParam(value = "resources", required = false) Set<ParserList> parserIdentifiers,
+                              @RequestParam(value = "withSource", required = false) Set<ParserList> parserIdentifiers,
                               @RequestParam(value = "minPrice", required = false) @PositiveOrZero Integer minPrice,
                               @RequestParam(value = "maxPrice", required = false) @PositiveOrZero Integer maxPrice) {
         SearchProperties properties = new SearchProperties();
@@ -47,7 +44,37 @@ public class FinderController {
         } else {
             parserIdentifiers.remove(null);
 
+            if (parserIdentifiers == null || parserIdentifiers.isEmpty()) { return finderService.find(findQuery, properties); }
+
             return finderService.find(findQuery, properties, parserIdentifiers);
         }
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemDto> findIn(@Valid @RequestBody List<ItemDto> searchableItems,
+                                @RequestParam(value = "withoutSource", required = false) Set<ParserList> parserIdentifiers,
+                                @RequestParam(value = "minPrice", required = false) @PositiveOrZero Integer minPrice,
+                                @RequestParam(value = "maxPrice", required = false) @PositiveOrZero Integer maxPrice) {
+
+        SearchProperties properties = new SearchProperties();
+
+        if (minPrice != null) { properties.setProperty(PropertyKey.MIN_PRICE, minPrice.toString()); }
+
+        if (maxPrice != null) { properties.setProperty(PropertyKey.MAX_PRICE, maxPrice.toString()); }
+
+        if (parserIdentifiers != null && !parserIdentifiers.isEmpty()) {
+            parserIdentifiers.remove(null);
+
+            if (parserIdentifiers != null && !parserIdentifiers.isEmpty()) {
+                properties.setProperty(PropertyKey.WITHOUT_SOURCE, "");
+                parserIdentifiers.forEach(identifier -> {
+                    properties.setProperty(PropertyKey.WITHOUT_SOURCE, properties.getProperty(PropertyKey.WITHOUT_SOURCE) + identifier.toString() + " ");
+                });
+            }
+        }
+
+        return finderService.findIn(searchableItems, properties);
+    }
+
 }

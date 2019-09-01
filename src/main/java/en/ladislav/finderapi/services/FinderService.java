@@ -12,4 +12,6 @@ public interface FinderService {
     List<ItemDto> find(String findQuery, SearchProperties properties);
 
     List<ItemDto> find(String findQuery, SearchProperties properties, Set<ParserList> parserIdentifiers);
+
+    List<ItemDto> findIn(List<ItemDto> itemDtos, SearchProperties properties);
 }
