@@ -1,17 +1,28 @@
 package en.ladislav.finderapi.utility.parser;
 
+import en.ladislav.finderapi.config.ThreadConfig;
 import en.ladislav.finderapi.utility.Item;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import en.ladislav.finderapi.soft.Validator;
+import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
+@Service
 public class RozetkaParser extends Parser {
 
     private static final String ROZETKA_URL = "https://rozetka.com.ua/";
@@ -46,23 +57,41 @@ public class RozetkaParser extends Parser {
     @Override
     protected Elements parseAllPages(String url) {
         int pageNum = 1;
+        ArrayList<String> urls = new ArrayList<>();
+        while (pageNum < 33) {
+            urls.add(url + "&redirected=1&p=" + pageNum++);
+        }
 
         Elements elements = new Elements();
-        Document document = this.connect(url + "&redirected=1&p=" + pageNum);
+        ExecutorService executor = Executors.newFixedThreadPool(32);
+        RozetkaParser parser = this;
 
-        while (document != null) {
+        List<Callable<Elements>> callableTasks = new ArrayList<>();
+        urls.forEach((urlPath) -> { callableTasks.add(() -> parser.parsePage(urlPath)); });
+
+        try {
+            List<Future<Elements>> futures = executor.invokeAll(callableTasks);
+            for (Future future : futures) { elements.addAll((Elements) future.get()); }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return elements;
+    }
+
+    @Override
+    @Async
+    protected Elements parsePage(String url) {
+        Elements elements = new Elements();
+        Document document = this.connect(url);
+
+        if (document != null) {
             if(!document.getElementsByClass("search-container-nothing").isEmpty()) {
-                //sdfg test
-
                 log.warn("Nothing was found: [{}]", document.location());
-                break;
+            } else {
+                log.info("Connected to [{}] [{}]", document.location(), document.title());
+                elements.addAll(this.parse(document));
             }
-
-            log.info("Connected to [{}] [{}] [{}]", document.location(), pageNum, document.title());
-
-            elements.addAll(this.parse(document));
-
-            document = this.connect(url + "&redirected=1&p=" + ++pageNum);
         }
 
         return elements;

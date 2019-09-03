@@ -66,6 +66,8 @@ public abstract class Parser implements Finder
 
     protected abstract Elements parseAllPages(String url);
 
+    protected abstract Elements parsePage(String url);
+
     protected abstract Elements parse(Document document);
 
     protected abstract Elements getElementsFromPage(Document document);
