@@ -22,18 +22,8 @@ public class RozetkaParser extends Parser {
 
     public ArrayList<Item> find(String phrase) {
         String findExpressionURL = "search/?text=" + phrase.replace(" ", "+");
-        Elements elements = parseAllPages(findExpressionURL);
 
-        ArrayList<Item> items = new ArrayList<Item>();
-        elements.forEach(element -> {
-            Item item = this.parse(element);
-
-            if (item != null) {
-                items.add(item);
-            }
-        });
-
-        return items;
+        return super.find(findExpressionURL);
     }
 
     @Override

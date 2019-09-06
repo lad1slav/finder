@@ -7,6 +7,8 @@ import en.ladislav.finderapi.utility.property.PropertyKey;
 import en.ladislav.finderapi.utility.property.SearchProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +36,15 @@ public class FinderController {
                               @RequestParam(value = "withSource", required = false) Set<ParserList> parserIdentifiers,
                               @RequestParam(value = "minPrice", required = false) @PositiveOrZero Integer minPrice,
                               @RequestParam(value = "maxPrice", required = false) @PositiveOrZero Integer maxPrice) {
+
+//        try {
+//            Document document = Jsoup.connect("https://comfy.ua/catalogsearch/result?q=mi+band&p=1").get();
+//
+//            System.out.println(document);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         SearchProperties properties = new SearchProperties();
 
         if (minPrice != null) { properties.setProperty(PropertyKey.MIN_PRICE, minPrice.toString()); }

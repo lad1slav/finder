@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 
 @Slf4j
 public abstract class Parser implements Finder
@@ -21,6 +22,22 @@ public abstract class Parser implements Finder
 
     Parser(String url) {
         this.URL = url;
+    }
+
+    @Override
+    public ArrayList<Item> find(String phrase) {
+        Elements elements = parseAllPages(phrase);
+
+        ArrayList<Item> items = new ArrayList<Item>();
+        elements.forEach(element -> {
+            Item item = this.parse(element);
+
+            if (item != null) {
+                items.add(item);
+            }
+        });
+
+        return items;
     }
 
     Document connect(String url) {
