@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class FinderController {
                               @RequestParam(value = "maxPrice", required = false) @PositiveOrZero Integer maxPrice) {
 
 //        try {
-//            Document document = Jsoup.connect("https://comfy.ua/catalogsearch/result?q=mi+band&p=1").get();
+//            Document document = Jsoup.connect("https://prom.ua/search?page=1&search_term=miband").get();
 //
 //            System.out.println(document);
 //        } catch (IOException e) {
@@ -60,6 +61,8 @@ public class FinderController {
 
             return finderService.find(findQuery, properties, parserIdentifiers);
         }
+
+//        return new ArrayList<ItemDto>();
     }
 
     @PostMapping

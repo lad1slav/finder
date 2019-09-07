@@ -12,12 +12,11 @@ import java.util.Set;
 @AllArgsConstructor
 public enum ParserList {
     ROZETKA_PARSER(new RozetkaParser()),
-    COMFY_PARSER(new ComfyParser());
+    PROM_PARSER(new PromParser());
 
     private final Parser parser;
 
-    public static final List<Parser> allParsers = Lists.newArrayList(ROZETKA_PARSER.getParser(),
-            COMFY_PARSER.getParser());
+    public static final List<Parser> allParsers = Lists.newArrayList(ROZETKA_PARSER.getParser(), PROM_PARSER.getParser());
 
     public static final Set<ParserList> allParserIdentifiers = Sets.newHashSet(ParserList.values());
 }

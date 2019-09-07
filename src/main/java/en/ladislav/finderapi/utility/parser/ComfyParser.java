@@ -28,6 +28,12 @@ public class ComfyParser extends  Parser {
     }
 
     @Override
+    Document connect(String url) {
+        //robot check
+        return super.connect(url);
+    }
+
+    @Override
     protected Elements parse(Document document) {
         Elements desc = this.getElementsFromPage(document);
 
