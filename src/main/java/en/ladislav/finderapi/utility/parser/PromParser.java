@@ -65,7 +65,7 @@ public class PromParser extends Parser {
     protected boolean elementExist(Element element) {
         Element wrapStatus = element.getElementsByClass("x-product-presence").last();
 
-        if(wrapStatus.attributes().get("class").split(" ").length > 1) { return false; }
+        if(wrapStatus == null || wrapStatus.attributes().get("class").split(" ").length > 1) { return false; }
 
         return true;
     }
