@@ -30,10 +30,14 @@ public abstract class Parser implements Finder
 
         ArrayList<Item> items = new ArrayList<Item>();
         elements.forEach(element -> {
-            Item item = this.parse(element);
+            try {
+                Item item = this.parse(element);
 
-            if (item != null) {
-                items.add(item);
+                if (item != null) {
+                    items.add(item);
+                }
+            } catch (Exception e) {
+                log.error("{}", e);
             }
         });
 

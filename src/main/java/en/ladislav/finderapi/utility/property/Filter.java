@@ -8,7 +8,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 
-public class SearchProperties {
+public class Filter {
     Properties properties = new Properties();
 
     public String getProperty(PropertyKey key) {
@@ -31,7 +31,7 @@ public class SearchProperties {
         return this.properties.propertyNames();
     }
 
-    public ArrayList<Item> findIn(ArrayList<Item> items) {
+    public ArrayList<Item> trim(ArrayList<Item> items) {
         if (this.isEmpty()) { return items; }
 
         ArrayList<Item> resultItemList = new ArrayList<>(items);

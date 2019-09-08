@@ -2,13 +2,13 @@ package en.ladislav.finderapi.api.controller;
 
 import en.ladislav.finderapi.api.dto.ItemDto;
 import en.ladislav.finderapi.services.FinderService;
+import en.ladislav.finderapi.utility.Item;
 import en.ladislav.finderapi.utility.parser.ParserList;
 import en.ladislav.finderapi.utility.property.PropertyKey;
-import en.ladislav.finderapi.utility.property.SearchProperties;
+import en.ladislav.finderapi.utility.property.Filter;
+import en.ladislav.finderapi.utility.sort.SortKey;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +45,7 @@ public class FinderController {
 //            e.printStackTrace();
 //        }
 
-        SearchProperties properties = new SearchProperties();
+        Filter properties = new Filter();
 
         if (minPrice != null) { properties.setProperty(PropertyKey.MIN_PRICE, minPrice.toString()); }
 //      maxPrice != null && !maxPrice.isEmpty()
@@ -67,12 +66,12 @@ public class FinderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> findIn(@Valid @RequestBody List<ItemDto> searchableItems,
-                                @RequestParam(value = "withoutSource", required = false) Set<ParserList> parserIdentifiers,
-                                @RequestParam(value = "minPrice", required = false) @PositiveOrZero Integer minPrice,
-                                @RequestParam(value = "maxPrice", required = false) @PositiveOrZero Integer maxPrice) {
+    public List<ItemDto> trim(@Valid @RequestBody List<ItemDto> searchableItems,
+                              @RequestParam(value = "withoutSource", required = false) Set<ParserList> parserIdentifiers,
+                              @RequestParam(value = "minPrice", required = false) @PositiveOrZero Integer minPrice,
+                              @RequestParam(value = "maxPrice", required = false) @PositiveOrZero Integer maxPrice) {
 
-        SearchProperties properties = new SearchProperties();
+        Filter properties = new Filter();
 
         if (minPrice != null) { properties.setProperty(PropertyKey.MIN_PRICE, minPrice.toString()); }
 
@@ -89,7 +88,7 @@ public class FinderController {
             }
         }
 
-        return finderService.findIn(searchableItems, properties);
+        return finderService.trim(searchableItems, properties);
     }
 
 }

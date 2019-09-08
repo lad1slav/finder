@@ -1,17 +1,13 @@
 package en.ladislav.finderapi.services;
 
 import en.ladislav.finderapi.api.dto.ItemDto;
-import en.ladislav.finderapi.api.exception.BadRequestException;
 import en.ladislav.finderapi.mapper.ItemMapper;
 import en.ladislav.finderapi.utility.Item;
 import en.ladislav.finderapi.utility.parser.ParserList;
-import en.ladislav.finderapi.utility.property.PropertyKey;
-import en.ladislav.finderapi.utility.property.SearchProperties;
+import en.ladislav.finderapi.utility.property.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +21,7 @@ public class FinderServiceImpl implements FinderService {
     private ItemMapper itemMapper;
 
     @Override
-    public List<ItemDto> findIn(List<ItemDto> itemDtos, SearchProperties properties) {
+    public List<ItemDto> trim(List<ItemDto> itemDtos, Filter properties) {
         log.info("Searching for [{}] items", itemDtos.size());
         Long time = System.currentTimeMillis();
 
@@ -40,7 +36,7 @@ public class FinderServiceImpl implements FinderService {
 
 //        log.info("Wrapped ItemDto to Item: left [{}] items", items.size());
 
-        List<Item> result = properties.findIn(items);
+        List<Item> result = properties.trim(items);
 
         time = System.currentTimeMillis() - time;
         log.info("Found [{}] items in [{}] ms", result.size(), time);
@@ -49,7 +45,7 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public List<ItemDto> find(String findQuery, SearchProperties properties, Set<ParserList> parserIdentifiers) {
+    public List<ItemDto> find(String findQuery, Filter properties, Set<ParserList> parserIdentifiers) {
         ArrayList<Item> result = new ArrayList<>();
 
         log.info("Searching for query \"{}\"", findQuery);
@@ -64,11 +60,11 @@ public class FinderServiceImpl implements FinderService {
         time = System.currentTimeMillis() - time;
         log.info("Searching for query \"{}\" was finished in {} ms", findQuery, time);
 
-        return itemMapper.itemsToItemDtos(properties.findIn(result));
+        return itemMapper.itemsToItemDtos(properties.trim(result));
     }
 
     @Override
-    public List<ItemDto> find(String findQuery, SearchProperties properties) {
+    public List<ItemDto> find(String findQuery, Filter properties) {
         return this.find(findQuery, properties, ParserList.allParserIdentifiers);
     }
 }
