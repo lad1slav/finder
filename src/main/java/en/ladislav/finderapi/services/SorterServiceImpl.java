@@ -2,7 +2,7 @@ package en.ladislav.finderapi.services;
 
 import en.ladislav.finderapi.api.dto.ItemDto;
 import en.ladislav.finderapi.mapper.ItemMapper;
-import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.model.Item;
 import en.ladislav.finderapi.utility.sort.Sorter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,15 +1,12 @@
 package en.ladislav.finderapi.utility.parser;
 
-import en.ladislav.finderapi.soft.Validator;
-import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.model.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 public class ComfyParser extends  Parser {

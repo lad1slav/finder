@@ -1,6 +1,6 @@
 package en.ladislav.finderapi.utility.parser;
 
-import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.model.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

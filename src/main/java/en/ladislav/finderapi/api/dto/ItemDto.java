@@ -12,7 +12,7 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 public class ItemDto {
     @NotBlank
-    private String itemId;
+    private long itemId;
     @NotBlank
     private String itemName;
     @NotBlank

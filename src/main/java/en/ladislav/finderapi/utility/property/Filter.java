@@ -1,7 +1,7 @@
 package en.ladislav.finderapi.utility.property;
 
 import en.ladislav.finderapi.utility.parser.ParserList;
-import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.model.Item;
 
 import java.util.ArrayList;
 import java.util.Enumeration;

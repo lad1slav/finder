@@ -2,11 +2,9 @@ package en.ladislav.finderapi.api.controller;
 
 import en.ladislav.finderapi.api.dto.ItemDto;
 import en.ladislav.finderapi.services.FinderService;
-import en.ladislav.finderapi.utility.Item;
 import en.ladislav.finderapi.utility.parser.ParserList;
 import en.ladislav.finderapi.utility.property.PropertyKey;
 import en.ladislav.finderapi.utility.property.Filter;
-import en.ladislav.finderapi.utility.sort.SortKey;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 

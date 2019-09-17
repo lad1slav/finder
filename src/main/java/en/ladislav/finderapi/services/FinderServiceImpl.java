@@ -2,7 +2,7 @@ package en.ladislav.finderapi.services;
 
 import en.ladislav.finderapi.api.dto.ItemDto;
 import en.ladislav.finderapi.mapper.ItemMapper;
-import en.ladislav.finderapi.utility.Item;
+import en.ladislav.finderapi.model.Item;
 import en.ladislav.finderapi.utility.parser.ParserList;
 import en.ladislav.finderapi.utility.property.Filter;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,6 @@
 package en.ladislav.finderapi.utility.sort;
 
-import en.ladislav.finderapi.utility.Item;
-import en.ladislav.finderapi.utility.parser.ParserList;
-import en.ladislav.finderapi.utility.property.PropertyKey;
+import en.ladislav.finderapi.model.Item;
 
 import java.util.*;
 

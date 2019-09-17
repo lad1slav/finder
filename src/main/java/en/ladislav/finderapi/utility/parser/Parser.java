@@ -1,9 +1,7 @@
 package en.ladislav.finderapi.utility.parser;
 
 import en.ladislav.finderapi.utility.Finder;
-import en.ladislav.finderapi.utility.Item;
-import lombok.Getter;
-import lombok.Setter;
+import en.ladislav.finderapi.model.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
