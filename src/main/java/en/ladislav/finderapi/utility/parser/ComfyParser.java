@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Objects.isNull;
+
 @Slf4j
 public class ComfyParser extends  Parser {
 
@@ -22,13 +24,13 @@ public class ComfyParser extends  Parser {
 
     @Override
     public ArrayList<Item> find(String phrase) {
-        String findExpressionURL = "catalogsearch/result?q=" + phrase.replace(" ", "+");
+        String findExpressionURL = "search/cat_120/?q=" + phrase.replace(" ", "+");
 
         return super.find(findExpressionURL);
     }
 
     @Override
-    Document connect(String url) {
+    public Document connect(String url) {
         //robot check
         return super.connect(url);
     }
@@ -36,6 +38,13 @@ public class ComfyParser extends  Parser {
     @Override
     protected Elements parse(Document document) {
         Elements desc = this.getElementsFromPage(document);
+
+//        log.info(desc.toString());
+//        try {
+//            Thread.sleep(999999L);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
         return desc;
     }
@@ -45,61 +54,62 @@ public class ComfyParser extends  Parser {
         int pageNum = 1;
 
         Elements elements = new Elements();
-        Document document = this.connect(url + "&p=" + pageNum);
+        Document document = this.connect(url);
+        if (!isNull(document)) {
 
-        System.out.println(document.text());
+//        System.out.println(document.text());
 
-        while (document.getElementsByClass("category__empty").isEmpty()) {
-            if(!document.getElementsByClass("search-empty").isEmpty()) {
-                log.warn("Nothing was found: [{}]", document.location());
-                break;
-            }
+//        while (document.getElementsByClass("category__empty").isEmpty()) {
+//            if(!document.getElementsByClass("search-empty").isEmpty()) {
+//                log.warn("Nothing was found: [{}]", document.location());
+//                break;
+//            }
 
             log.info("Connected to [{}] [{}] [{}]", document.location(), pageNum, document.title());
 
             elements.addAll(this.parse(document));
 
-            document = this.connect(url + "&p=" + ++pageNum);
+//            document = this.connect(url + "&p=" + ++pageNum);
+//        }
         }
 
         return elements;
     }
 
     @Override
-    protected Elements getElementsFromPage(Document document) {
-        Elements desc = document.getElementsByClass("product-item__i");
+    public Elements getElementsFromPage(Document document) {
+        Elements desc = document.getElementsByClass("products-list-item");
 
         return desc;
     }
 
     @Override
-    protected boolean elementExist(Element element) {
-        Element wrapStatus = element.getElementsByClass("js-item-informer-wrap").last();
+    protected Boolean elementExist(Element element) {
+        Element wrapStatus = element.getElementsByClass("products-list-item__annotation-title").last();
 
-        if(!wrapStatus.getElementsByClass("sms-notification").isEmpty()) { return false; }
+        if(!isNull(wrapStatus) && wrapStatus.text().contains("Товар закончился")) { return false; }
 
         return true;
     }
 
     @Override
     protected String getElementName(Element element) {
-        Element name = element.getElementsByClass("product-item__name").last();
-        name = name.getElementsByTag("a").last();
+        Element name = element.getElementsByClass("products-list-item__info").first();
+        name = name.getElementsByTag("a").first();
 
         return name.ownText();
     }
 
     @Override
     protected String getElementPrice(Element element) {
-        Element price = element.getElementsByClass("product-item__price").last();
-        price = price.getElementsByClass("price-value").last();
+        Element price = element.getElementsByClass("products-list-item__actions-price-current").last();
 
-        return price.ownText();
+        return price.ownText().replace(" ", "");
     }
 
     @Override
     protected String getElementURL(Element element) {
-        Element url = element.getElementsByClass("product-item__name").last();
+        Element url = element.getElementsByClass("products-list-item__info").first();
         url = url.getElementsByTag("a").last();
 
         return url.attributes().get("href");
@@ -107,9 +117,18 @@ public class ComfyParser extends  Parser {
 
     @Override
     protected String getElementPhotoURL(Element element) {
-        Element image = element.getElementsByClass("product-item__img").last();
+        Element image = element.getElementsByClass("products-list-item__img").last();
         image = image.getElementsByTag("img").last();
 
         return image.attributes().get("src");
+    }
+
+    @Override
+    public Boolean getElementExistFromPage(Document element) {
+        Element wrapStatus = element.getElementsByClass("products-list-item__annotation-title").last();
+
+        if(!isNull(wrapStatus) && wrapStatus.text().contains("Товар закончился")) { return false; }
+
+        return true;
     }
 }

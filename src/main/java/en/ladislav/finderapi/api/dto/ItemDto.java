@@ -12,7 +12,7 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 public class ItemDto {
     @NotBlank
-    private String itemId;
+    private Integer itemId;
     @NotBlank
     private String itemName;
     @NotBlank
@@ -25,4 +25,5 @@ public class ItemDto {
     private double itemPrice;
     @NotBlank
     private String itemSource;
+    private Boolean itemPresence;
 }

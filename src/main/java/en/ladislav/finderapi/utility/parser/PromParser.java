@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 @Slf4j
 public class PromParser extends Parser {
@@ -39,7 +40,7 @@ public class PromParser extends Parser {
         Elements elements = new Elements();
         Document document = this.connect(url + "&page=" + pageNum);
 
-        while (document.getElementsByClass("x-empty-results").isEmpty() && pageNum < 17) {
+        while (document.getElementsByClass("x-empty-results").isEmpty() && pageNum < 2) {
             log.info("Connected to [{}] [{}] [{}]", document.location(), pageNum, document.title());
 
             elements.addAll(this.parse(document));
@@ -55,46 +56,60 @@ public class PromParser extends Parser {
     }
 
     @Override
-    protected Elements getElementsFromPage(Document document) {
-        Elements desc = document.getElementsByClass("x-gallery-tile");
+    public Elements getElementsFromPage(Document document) {
+        Elements desc = document.getElementsByClass("js-productad");
 
         return desc;
     }
 
     @Override
-    protected boolean elementExist(Element element) {
-        Element wrapStatus = element.getElementsByClass("x-product-presence").last();
+    protected Boolean elementExist(Element element) {
+        Element wrapStatus = element.getElementsByAttributeValue("data-qaid","product_presence").first();
 
-        if(wrapStatus == null || wrapStatus.attributes().get("class").split(" ").length > 1) { return false; }
+        if(wrapStatus == null || (!wrapStatus.text().equals("В наявності") && !wrapStatus.text().equals("Закінчується")
+        && !wrapStatus.text().toLowerCase().contains("доставка"))) { return false; }
 
         return true;
     }
 
     @Override
     protected String getElementName(Element element) {
-        Element name = element.getElementsByClass("x-gallery-tile__name").last();
+        Element name = element.getElementsByAttributeValue("data-qaid", "product_name").last();
 
-        return name.ownText();
+        return name.text();
     }
 
     @Override
     protected String getElementPrice(Element element) {
-        Element price = element.getElementsByClass("x-gallery-tile__price").last();
+        Element price = element.getElementsByAttributeValue("data-qaid", "product_price").last();
 
         return price == null ? "" : price.attributes().get("data-qaprice");
     }
 
     @Override
     protected String getElementURL(Element element) {
-        Element url = element.getElementsByClass("x-gallery-tile__name").last();
+        Element url = element.getElementsByClass("js-productad").first();
 
-        return url.attributes().get("href");
+        return url == null ? "" : url.attributes().get("data-advtracking-click-url");
     }
 
     @Override
     protected String getElementPhotoURL(Element element) {
-        Element image = element.getElementsByClass("x-image-holder__img").last();
+        Element image = element.getElementsByAttributeValue("data-qaid", "image_link").first();
+//        log.info(element.toString());
+//        try {
+//            Thread.sleep(999999L);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        return image.attributes().get("src");
+        return image == null ? "" : image.children().first().attributes().get("src");
+    }
+
+    @Override
+    public Boolean getElementExistFromPage(Document element) {
+        Element existStatus = element.getElementsByAttributeValue("data-qaid", "main_product_info").first();
+
+        return this.elementExist(existStatus);
     }
 }

@@ -44,7 +44,7 @@ public abstract class Parser implements Finder
         return items;
     }
 
-    Document connect(String url) {
+    public Document connect(String url) {
         try {
             log.info("Connecting to [{}]", this.URL + url);
 
@@ -66,7 +66,7 @@ public abstract class Parser implements Finder
     }
 
     Item parse(Element element) {
-        if (!this.elementExist(element)) { return null; }
+//        if (!this.elementExist(element)) { return null; }
 
         Item item = new Item();
 
@@ -76,6 +76,8 @@ public abstract class Parser implements Finder
             item.setItemURL(this.getElementURL(element));
             item.setItemPhotoURL(this.getElementPhotoURL(element));
             item.setItemSource(this.URL);
+//            item.setItemPresence(!(item.getItemPrice() > 500) && this.elementExist(element));
+            item.setItemPresence(this.elementExist(element));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
 
@@ -89,7 +91,7 @@ public abstract class Parser implements Finder
 
     protected abstract Elements parse(Document document);
 
-    protected abstract Elements getElementsFromPage(Document document);
+    public abstract Elements getElementsFromPage(Document document);
 
     protected abstract String getElementName(Element element);
 
@@ -99,5 +101,7 @@ public abstract class Parser implements Finder
 
     protected abstract String getElementPhotoURL(Element element);
 
-    protected abstract boolean elementExist(Element element);
+    protected abstract Boolean elementExist(Element element);
+
+    public abstract Boolean getElementExistFromPage(Document element);
 }

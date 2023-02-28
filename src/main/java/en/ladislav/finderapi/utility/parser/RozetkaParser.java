@@ -40,7 +40,10 @@ public class RozetkaParser extends Parser {
         Elements elements = new Elements();
         Document document = this.connect(url + "&redirected=1&p=" + pageNum);
 
-        while (document != null) {
+        log.info("parsed document:");
+        log.info(document.toString());
+
+        while (document != null && pageNum < 10) {
             if(!document.getElementsByClass("search-container-nothing").isEmpty()) {
                 //sdfg test
 
@@ -59,14 +62,15 @@ public class RozetkaParser extends Parser {
     }
 
     @Override
-    protected Elements getElementsFromPage(Document document) {
-        Elements desc = document.getElementsByClass("g-i-tile-i-box-desc");
+    public Elements getElementsFromPage(Document document) {
+        Elements desc = document.getElementsByClass("content_type_catalog");
+        log.info("Size: " + desc.size());
 
         return desc;
     }
 
     @Override
-    protected boolean elementExist(Element element) {
+    protected Boolean elementExist(Element element) {
         Element wrapStatus = element.getElementsByClass("g-i-status-wrap").last();
 
         if(!wrapStatus.getElementsByClass("unavailable").isEmpty()) { return false; }
@@ -113,5 +117,19 @@ public class RozetkaParser extends Parser {
         } catch (IllegalArgumentException e) {
             return image.attributes().get("src");
         }
+    }
+
+    @Override
+    public Boolean getElementExistFromPage(Document element) {
+        Element image = element.getElementsByAttributeValue("data-qaid", "image_link").first();
+//        log.info(element.toString());
+//        try {
+//            Thread.sleep(999999L);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+
+//        return image == null ? "" : image.children().first().attributes().get("src");
+        return true;
     }
 }
